@@ -4,8 +4,13 @@ const helmet = require("helmet");
 const mongoose = require('mongoose')
 require('dotenv').config()
 
+// middleware
+const tokencheck = require('./middleware/auth-middleware')
+
 // routes
 const authRouter = require('./auth/router')
+const jobsRouter = require('./jobs/router')
+const userRouter = require('./users/router')
 
 
 
@@ -25,6 +30,8 @@ mongoose.connect(process.env.MONGOURI, {
 
 
 server.use("/auth", authRouter)
+server.use("/jobs", tokencheck, jobsRouter)
+server.use("/user", tokencheck, userRouter)
 
 server.get("/", (req, res) => {
     res.send("Welcome to Our Server (DemandDash)");
